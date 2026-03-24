@@ -59,3 +59,33 @@ This workspace is firmly linked to the deployed Pod framework. Whenever you stru
 ./scripts/sync_to_runpod.sh
 ```
 This utility parses your local changes, enforces Git ignores, and instantly mirrors the upgraded architecture to your cloud Execution Pod!
+
+## 5. Developer Cheat Sheet (Commands)
+
+This reference guide contains the essential low-level terminal commands required to operate, debug, and connect to the underlying Zero-Human AI infrastructure.
+
+### Remote SSH Access
+Log into the root RunPod execution container directly from your Mac terminal:
+```bash
+ssh -o StrictHostKeyChecking=no -p 22168 -i ~/.ssh/id_ed25519 root@194.68.245.210
+```
+
+### Switching to the Agent User
+Once inside the RunPod, securely switch to the `paperclip` user environment containing the GitHub CLI bindings and OpenClaw models:
+```bash
+su - paperclip
+```
+
+### Database Inspection (PostgreSQL)
+To securely verify if Issues are spawning from the Dashboard natively:
+```bash
+# Run this AFTER executing `su - paperclip`
+psql -d paperclip -c "SELECT identifier, status, title FROM issues ORDER BY created_at DESC LIMIT 5;"
+```
+
+### Global Service Reboot Hook
+If you modify the `.env` file locally on your Mac, you MUST run these two commands from your local repository to safely inject the new tokens into the active UI server:
+```bash
+./scripts/sync_to_runpod.sh
+./scripts/Shell_Execution/restart_dashboard.sh
+```
