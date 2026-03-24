@@ -3,7 +3,17 @@ import sys
 import subprocess
 import os
 
+def load_env():
+    env_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '.env')
+    if os.path.exists(env_path):
+        with open(env_path) as f:
+            for line in f:
+                if '=' in line and not line.strip().startswith('#'):
+                    k, v = line.strip().split('=', 1)
+                    os.environ[k.strip()] = v.strip().strip('"').strip("'")
+
 def main():
+    load_env()
     try:
         agent_id = os.environ.get("PAPERCLIP_AGENT_ID")
         if not agent_id:

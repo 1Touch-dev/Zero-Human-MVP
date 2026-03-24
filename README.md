@@ -12,18 +12,17 @@ Following the `Agentic_Engineering.pdf` specification, the Paperclip backend int
 ## 2. Multi-Tenant Automations (Phase 3 Backend)
 The MVP utilizes dynamic Database Integrations to secure user access tokens statelessly! We do not globally hardcode `.netrc` passwords.
 
-### Connecting Your GitHub Token to the RunPod
-Because the token is securely queried from the PostgreSQL database during the Architect cascade, you must inject your Personal Access Token directly into the RunPod's database. To do this, simply copy and execute this exact SSH command from your local terminal (be sure to replace `YOUR_GITHUB_PAT`!):
+### Connecting Your Authenticators (`.env` Config)
+To vastly simplify user operations, both your `OPENAI_API_KEY` and `GITHUB_TOKEN` are entirely managed through a standard `.env` configuration file sitting securely in the root of your `Zero-Human-MVP` folder!
 
+1. Create or edit the `.env` file locally:
 ```bash
-ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519 -p 22168 root@194.68.245.210 << 'EOF'
-su - paperclip -c "env PGPASSWORD=paperclip psql -h localhost -p 5433 -U paperclip -d paperclip -c \"INSERT INTO company_integrations (company_id, github_token) VALUES ('00000000-0000-0000-0000-000000000001', '<YOUR_GITHUB_PAT>') ON CONFLICT (company_id) DO UPDATE SET github_token = EXCLUDED.github_token;\""
-EOF
+OPENAI_API_KEY="sk-proj-YOUR_KEY"
+GITHUB_TOKEN="github_pat_YOUR_TOKEN"
 ```
+2. Simply run the sync script `./scripts/sync_to_runpod.sh` from your terminal!
 
-- The pipeline natively intercepts this securely injected Token from the `company_integrations` table on-the-fly, pipes it into the Agentic Pipeline, and cleanly authenticates the GitHub API without permanently logging it in `.bashrc` files.
-
-*(For debugging operations, you can also actively override the Database by forcefully pasting your Token string directly into `env["GITHUB_TOKEN"]` within `scripts/Python_Bridges/openclaw_bridge_cascade.py` and running `./scripts/sync_to_runpod.sh`).*
+The `.env` file is permanently ignored from GitHub tracking (via `.gitignore`), but our Rsync utility safely ferries it into the RunPod. The internal Python scripts natively parse this file on the system, insulating your credentials from both the repository and the execution logs perfectly!
 
 ## 3. End-User Testing & Operations
 

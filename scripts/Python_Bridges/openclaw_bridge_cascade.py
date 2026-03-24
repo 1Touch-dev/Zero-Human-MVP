@@ -4,7 +4,17 @@ import subprocess
 import os
 import time
 
+def load_env():
+    env_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '.env')
+    if os.path.exists(env_path):
+        with open(env_path) as f:
+            for line in f:
+                if '=' in line and not line.strip().startswith('#'):
+                    k, v = line.strip().split('=', 1)
+                    os.environ[k.strip()] = v.strip().strip('"').strip("'")
+
 def main():
+    load_env()
     try:
         agent_id = os.environ.get("PAPERCLIP_AGENT_ID")
         if not agent_id:
@@ -30,16 +40,12 @@ def main():
         description = '|'.join(parts[2:-1]).strip()
         company_id = parts[-1].strip()
         
-        # Dynamically fetch the Github Token for this Company!
-        token_cmd = ["psql", "-h", "localhost", "-p", "5433", "-U", "paperclip", "-d", "paperclip", "-t", "-c",
-             f"SELECT github_token FROM company_integrations WHERE company_id = '{company_id}';"]
-        token_res = subprocess.run(token_cmd, env=env, capture_output=True, text=True)
-        gh_token = token_res.stdout.strip()
-        
+        # Fallback multi-tenant system to flat .env configuration!
+        gh_token = os.environ.get("GITHUB_TOKEN", "")
         if gh_token:
             env["GITHUB_TOKEN"] = gh_token
         else:
-            print(f">>> CRITICAL ERROR: No GitHub Token Integration found for Company {company_id}! Aborting cascade.")
+            print(">>> CRITICAL ERROR: No GITHUB_TOKEN found in .env! Aborting cascade.")
             sys.exit(1)
         
         agent_roles = ["The Architect", "The Grunt", "The Pedant", "The Scribe"]
