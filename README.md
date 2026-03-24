@@ -34,7 +34,9 @@ The `.env` file is permanently ignored from GitHub tracking (via `.gitignore`), 
 End-Users natively trigger the pipeline without touching terminals.
 1. Navigate to the **Paperclip Web Dashboard**.
 2. Click **New Issue** (or the **+** button).
-3. Explicitly define the target goal indicating exactly which codebase repo it should touch (e.g. *"Clone https://github.com/.../sandbox.git. Build a new React Navigation Header. Open a Pull request."*).
+3. Explicitly define the target goal indicating exactly which codebase repo it should natively touch.
+> ⚠️ **CRITICAL PROMPTING RULE:** You MUST explicitly provide the Pull Request flags into the task so the background pipeline doesn't hang forever waiting on an invisible Git CLI `[Y/n]` interactive menu!
+> **Bulletproof Prompt Example:** *"Clone `https://github.com/.../sandbox.git`. Build a new React Navigation Header. Run git commit and git push. Crucially, you MUST run exactly `gh pr create --head feature-xyz --title 'New Feature' --body 'AI Generated'`. Do NOT use interactive terminal prompts or simple gh commands."*
 4. **Assign the ticket to "The Architect"**. 
 5. Sit back! The status will automatically cycle from `Todo` -> `In Progress` -> `Done` silently!
 
