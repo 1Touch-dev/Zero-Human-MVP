@@ -89,3 +89,43 @@ Simply open your local `.env` and replace `GITHUB_TOKEN="<THE_NEW_TOKEN>"`.
 **That’s it.** The AI Agent will immediately assume the identity of the new security token, effortlessly cloning the target organization's repository, spinning up physical features, and delivering formal Pull Requests directly onto the new Enterprise's GitHub page.
 
 *Welcome to the Zero-Human pipeline. Automate Boilerplate. Elevate Strategy.*
+
+---
+
+## 6. End-to-End Execution & Debugging Workflow
+
+If you are a Systems Administrator, you may need to entirely bypass the web portal and inspect the OpenClaw execution threads organically inside the Cloud Pod. This sequence guarantees complete visibility across the active platform.
+
+### Step 1: Securely Entering the Server
+Open a terminal on your Local Machine and map a secure SSH layer directly onto the root system:
+```bash
+ssh -o StrictHostKeyChecking=no -p 22168 -i ~/.ssh/id_ed25519 root@194.68.245.210
+```
+
+### Step 2: Accessing the Execution Container
+Once inside the Server organically, seamlessly transition into the isolated user container actively running the Paperclip Daemon and OpenClaw agents:
+```bash
+su - paperclip
+```
+
+### Step 3: Natively Executing the Python Bridge (Manual Trigger)
+If you wish to trigger the agents identically to the Web UI but execute them safely through our isolated Python execution bridge without relying on the Dashboards at all:
+```bash
+# Run this strictly as the `paperclip` user!
+python3 /home/paperclip/Zero-Human-MVP/scripts/Python_Bridges/openclaw_bridge_cascade.py
+```
+
+### Step 4: Live Telemetry & OpenClaw Debugging
+If an Agent mysteriously hangs endlessly without submitting the GitHub Pull Request, the AI process likely hit a Git Authentication wall or ran out of OpenAI Tokens. To immediately visualize its physical terminal outputs:
+```bash
+# Dump the raw terminal loop from the very last AI session to see exactly what OpenClaw typed:
+# Run this strictly as the `paperclip` user!
+cat $(ls -t ~/.openclaw/agents/main/sessions/*.json | head -1) | grep -C 5 -i github
+```
+
+### Step 5: Validating Database Issue Triggers
+If you submit a "New Issue" in the Web UI but the AI structurally doesn't wake up, natively verify the Postgres trigger queues sitting inside the Cloud framework:
+```bash
+# Run this strictly as the `paperclip` user!
+psql -d paperclip -x -c "SELECT identifier, status, title FROM issues ORDER BY created_at DESC LIMIT 5;"
+```

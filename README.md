@@ -58,33 +58,46 @@ This workspace is firmly linked to the deployed Pod framework. Whenever you stru
 ```bash
 ./scripts/sync_to_runpod.sh
 ```
-This utility parses your local changes, enforces Git ignores, and instantly mirrors the upgraded architecture to your cloud Execution Pod!
+## 5. End-to-End Execution & Debugging Workflow
 
-## 5. Developer Cheat Sheet (Commands)
+This operational sequence explicitly layouts the exact chain of commands required to completely log into the Cloud Pod, manually execute the OpenClaw AI instances, debug output telemetry from stalled sessions, and observe database traces on the live system.
 
-This reference guide contains the essential low-level terminal commands required to operate, debug, and connect to the underlying Zero-Human AI infrastructure.
-
-### Remote SSH Access
+### Step 1: Securely Entering the Server
 Log into the root RunPod execution container directly from your Mac terminal:
 ```bash
 ssh -o StrictHostKeyChecking=no -p 22168 -i ~/.ssh/id_ed25519 root@194.68.245.210
 ```
 
-### Switching to the Agent User
+### Step 2: Accessing the Execution Container
 Once inside the RunPod, securely switch to the `paperclip` user environment containing the GitHub CLI bindings and OpenClaw models:
 ```bash
 su - paperclip
 ```
 
-### Database Inspection (PostgreSQL)
-To securely verify if Issues are spawning from the Dashboard natively:
+### Step 3: Natively Executing the Python Bridge (Manual Trigger)
+If you wish to trigger the agents identically to the Web UI but execute them safely through our isolated Python execution bridge:
+```bash
+# Run this AFTER executing `su - paperclip`
+python3 /home/paperclip/Zero-Human-MVP/scripts/Python_Bridges/openclaw_bridge_cascade.py
+```
+
+### Step 4: Live Telemetry & OpenClaw Debugging
+If an Agent hangs endlessly on Git authentication or crashes organically without closing the Paperclip Pull Request sequence, dump the exact raw Terminal outputs from the underlying AI component natively:
+```bash
+# Dump the raw terminal loop from the very last AI session:
+# Run this AFTER executing `su - paperclip`
+cat $(ls -t ~/.openclaw/agents/main/sessions/*.json | head -1) | grep -C 5 -i github
+```
+
+### Step 5: Validating Database Issue Triggers
+If you click "New Issue" in the Web UI but the AI doesn't wake up efficiently, verify the actual Postgres trigger states inside the Paperclip daemon natively:
 ```bash
 # Run this AFTER executing `su - paperclip`
 psql -d paperclip -c "SELECT identifier, status, title FROM issues ORDER BY created_at DESC LIMIT 5;"
 ```
 
 ### Global Service Reboot Hook
-If you modify the `.env` file locally on your Mac, you MUST run these two commands from your local repository to safely inject the new tokens into the active UI server:
+If you modify your `.env` tokens locally on your Mac, you MUST run these two isolated scripts from your local repository to safely inject the new tokens into the active UI Node server:
 ```bash
 ./scripts/sync_to_runpod.sh
 ./scripts/Shell_Execution/restart_dashboard.sh
