@@ -124,3 +124,31 @@ To seamlessly force native container tasks strictly untethered from asynchronous
 # Run rigidly logged as the isolated `paperclip` Linux subsystem wrapper!
 python3 /home/paperclip/Zero-Human-MVP/scripts/Python_Bridges/openclaw_bridge_cascade.py
 ```
+
+---
+
+## 7. Live Platform Demonstration (End-to-End)
+
+To seamlessly demonstrate the platform's autonomous capabilities to an engineering team or stakeholder without presenting a generic manual, execute this precise dual-screen presentation flow. This sequence allows the audience to physically watch the AI "think" and author code in real-time before validating the GitHub delivery natively.
+
+### Screen 1: The Terminal (Preparation)
+Prior to the meeting, open a Terminal window and establish a secure connection to the RunPod container. Transition into the execution user and initialize a log-tailing loop. This will remain blank until the UI officially triggers the AI locally.
+1. `ssh -o StrictHostKeyChecking=no -p 22168 -i ~/.ssh/id_ed25519 root@194.68.245.210`
+2. `su - paperclip`
+3. Leave this command physically ready to execute the second you press "Create" on the web ticket:
+   `tail -f $(ls -t ~/.openclaw/agents/main/sessions/*.json | head -1)`
+
+### Screen 2: Paperclip Web Dashboard (The Trigger)
+Share your web browser showing the Paperclip UI and your target GitHub URL simultaneously.
+1. Click **New Issue**.
+2. **Title:** `Build a Live Interactive Calculator`
+3. **Description:** Copy and paste the fully-automated execution block guaranteeing exact PR transitions:
+   > *"Clone https://github.com/YourOrg/YourRepository.git. Create an interactive HTML/CSS/JS calculator with a sleek dark-mode glassmorphism design. Ensure standard math operations work flawlessly. Run git branch, git add ., git commit -m 'Generate Calculator', and git push. Crucially, you MUST run exactly: `gh pr create --head feature-calculator --title 'Automated Calculator' --body 'Generated flawlessly by AI'`. Do NOT use interactive terminal prompts."*
+4. Click **Create** natively and immediately switch your screen focus back to the prepared Terminal loop!
+
+### Screen 1: The Terminal (Observation)
+Hit `Enter` on your `tail -f` command. The engineering team will immediately observe a massive physical stream of real-time bash execution logic, file authoring, and `git` networking flying across the screen as the OpenClaw AI organically interprets the prompt natively on the remote RunPod sandbox!
+
+### Screen 3: GitHub (Verification)
+Once the terminal formally outputs `"All agents successfully executed"`, immediately open the target GitHub Repository structurally in your browser.
+Navigate to the **Pull Requests** tab. The brand-new `Automated Calculator` feature will be sitting there waiting for human engineering review natively containing the written codebase, definitively proving the autonomous end-to-end framework capabilities.
