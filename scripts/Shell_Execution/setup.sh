@@ -1,5 +1,4 @@
 #!/bin/bash
-openclaw models set openai/gpt-4o
 mkdir -p ~/.openclaw/agents/main/agent
 cat << EOF > ~/.openclaw/agents/main/agent/auth-profiles.json
 {

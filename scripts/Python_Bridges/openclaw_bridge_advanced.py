@@ -57,6 +57,10 @@ def main():
         
         env["OPENAI_API_KEY"] = os.environ.get("OPENAI_API_KEY", "")
         
+        # Dynamically set the Active AI Model
+        target_model = os.environ.get("OPENCLAW_MODEL", "openai/gpt-4o")
+        subprocess.run(["/usr/bin/openclaw", "models", "set", target_model], env=env, check=False)
+        
         # Call openclaw
         subprocess.run(["/usr/bin/openclaw", "agent", "--agent", "main", "-m", message], env=env, check=True)
         

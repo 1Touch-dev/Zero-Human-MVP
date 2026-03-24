@@ -27,6 +27,9 @@ def main():
         
         os.environ["OPENAI_API_KEY"] = os.environ.get("OPENAI_API_KEY", "")
         
+        target_model = os.environ.get("OPENCLAW_MODEL", "openai/gpt-4o")
+        subprocess.run(["/usr/bin/openclaw", "models", "set", target_model])
+        
         subprocess.run(["/usr/bin/openclaw", "agent", "--agent", "main", "-m", message])
         
         cur.execute("UPDATE issues SET status = 'done' WHERE identifier = %s;", (identifier,))

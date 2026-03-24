@@ -50,6 +50,10 @@ def main():
         
         agent_roles = ["The Architect", "The Grunt", "The Pedant", "The Scribe"]
         
+        # Dynamically set the OpenClaw Active Model based on .env!
+        target_model = os.environ.get("OPENCLAW_MODEL", "openai/gpt-4o")
+        subprocess.run(["/usr/bin/openclaw", "models", "set", target_model], env=env, check=False)
+        
         subprocess.run("rm -rf /tmp/zero-human-sandbox/*", shell=True, check=False)
         subprocess.run(["mkdir", "-p", "/tmp/zero-human-sandbox"], check=False)
         

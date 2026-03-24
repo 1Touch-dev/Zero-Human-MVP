@@ -12,14 +12,18 @@ Following the `Agentic_Engineering.pdf` specification, the Paperclip backend int
 ## 2. Multi-Tenant Automations (Phase 3 Backend)
 The MVP utilizes dynamic Database Integrations to secure user access tokens statelessly! We do not globally hardcode `.netrc` passwords.
 
-### Connecting Your Authenticators (`.env` Config)
-To vastly simplify user operations, both your `OPENAI_API_KEY` and `GITHUB_TOKEN` are entirely managed through a standard `.env` configuration file sitting securely in the root of your `Zero-Human-MVP` folder!
+### Connecting Your Authenticators & Models (`.env` Config)
+To vastly simplify user operations, both your `OPENAI_API_KEY`, your `GITHUB_TOKEN`, and your **Active AI Model** are entirely managed through a standard `.env` configuration file sitting securely in the root of your `Zero-Human-MVP` folder!
 
 1. Create or edit the `.env` file locally:
 ```bash
 OPENAI_API_KEY="sk-proj-YOUR_KEY"
 GITHUB_TOKEN="github_pat_YOUR_TOKEN"
+OPENCLAW_MODEL="openai/gpt-4o"
 ```
+
+> **Model Overrides:** Want to run `gpt-5.4-codex` or `anthropic/claude-3.5-sonnet` instead? Simply change the `OPENCLAW_MODEL` flag. Our Python bridges will dynamically detect the override and instantly hot-swap the underlying AI Engine before executing the task cascade!
+
 2. Simply run the sync script `./scripts/sync_to_runpod.sh` from your terminal!
 
 The `.env` file is permanently ignored from GitHub tracking (via `.gitignore`), but our Rsync utility safely ferries it into the RunPod. The internal Python scripts natively parse this file on the system, insulating your credentials from both the repository and the execution logs perfectly!
