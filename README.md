@@ -1,6 +1,10 @@
 # Zero-Human MVP Platform
-
 This repository powers the automated **Zero-Human Paperclip MVP**, orchestrating the OpenClaw execution engine into a fully autonomous, 4-node Software Engineering department.
+
+## 0. Technical System Architecture & Handoff Guide
+If you are an onboarding engineer, system administrator, or DevOps architect inheriting this system, your complete guide covering architectural integrations, RunPod infrastructure, backend `.env` token injection, and database debugging sequences is prominently available here:
+
+👉 [**Zero-Human Platform: Architecture & Operations Manual**](docs/ZERO_HUMAN_ARCHITECTURE_AND_OPERATIONS.md)
 
 ## 1. Agentic Architecture Hierarchy
 Following the `Agentic_Engineering.pdf` specification, the Paperclip backend intercepts active tasks and triggers a highly secure Python proxy (`openclaw_bridge_cascade.py`) which delegates assignments seamlessly across four sequenced nodes:
