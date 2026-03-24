@@ -25,6 +25,7 @@ OPENCLAW_MODEL="openai/gpt-4o"
 > **Model Overrides:** Want to run `gpt-5.4-codex` or `anthropic/claude-3.5-sonnet` instead? Simply change the `OPENCLAW_MODEL` flag. Our Python bridges will dynamically detect the override and instantly hot-swap the underlying AI Engine before executing the task cascade!
 
 2. Simply run the sync script `./scripts/sync_to_runpod.sh` from your terminal!
+3. **Important:** Because the Paperclip Web Dashboard runs continuously in the background on the RunPod, it won't magically absorb new `.env` changes immediately. You MUST run `./scripts/Shell_Execution/restart_dashboard.sh` from your terminal. This instantly SSH links your tokens and securely reboots the remote Node service so it never desyncs!
 
 The `.env` file is permanently ignored from GitHub tracking (via `.gitignore`), but our Rsync utility safely ferries it into the RunPod. The internal Python scripts natively parse this file on the system, insulating your credentials from both the repository and the execution logs perfectly!
 

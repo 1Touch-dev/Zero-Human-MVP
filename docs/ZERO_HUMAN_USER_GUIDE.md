@@ -79,10 +79,12 @@ If you want to use the Zero-Human pipeline to build code for an entirely differe
 1. **The Issue Definition:** In the Paperclip Dashboard, simply write a new Issue and instruct the Architect to clone the new target repository:
 > *"Clone `https://github.com/YourNewCorp/TheNewProject.git`. Create the login module, commit, and push..."*
 2. **The Authentication Bound:**
-Because the platform relies on physical Git credential tunneling (`.netrc`), whoever "owns" the new project must generate a **Personal Access Token (PAT)** with strict Read/Write permissions for Code and Pull Requests.
-The RunPod server administrator must simply run two commands on the Execution Engine to swap out the virtual identity:
-   * `echo "password <THE_NEW_TOKEN>" >> ~/.netrc`
-   * `git config --global user.name "AI Agent"`
+Because the platform relies entirely on a centralized `.env` configuration vault sitting in your local codebase, whoever "owns" the new project must generate a **Personal Access Token (PAT)** with strict Read/Write permissions for Code and Pull Requests.
+Simply open your local `.env` and replace `GITHUB_TOKEN="<THE_NEW_TOKEN>"`.
+
+**To deploy the new keys, simply run these two scripts physically from your computer terminal:**
+* `./scripts/sync_to_runpod.sh` *(This pushes the new keys securely over SSH)*
+* `./scripts/Shell_Execution/restart_dashboard.sh` *(This gracefully reboots the Paperclip Node Web Server over SSH so it natively inherits your active Keys without freezing!)*
    
 **That’s it.** The AI Agent will immediately assume the identity of the new security token, effortlessly cloning the target organization's repository, spinning up physical features, and delivering formal Pull Requests directly onto the new Enterprise's GitHub page.
 
