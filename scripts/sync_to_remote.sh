@@ -13,9 +13,11 @@
 #   ./scripts/sync_to_remote.sh --watch  # Continuous syncing
 # -----------------------------------------------------------------------------
 
-# Configuration (Load from .env if it exists, use defaults otherwise)
+# Configuration (Load from .env securely)
 if [ -f .env ]; then
-    export $(grep -v '^#' .env | xargs)
+    set -o allexport
+    source .env
+    set +o allexport
 fi
 
 # DEFAULT SETTINGS (Override these in your local .env)
@@ -34,7 +36,7 @@ sync_files() {
     # Construct SSH command with optional identity file
     SSH_CMD="ssh -p $RUNPOD_PORT -o StrictHostKeyChecking=no"
     if [ -f "$SSH_KEY_PATH" ]; then
-        SSH_CMD="$SSH_CMD -i $SSH_KEY_PATH"
+        SSH_CMD="$SSH_CMD -i \"$SSH_KEY_PATH\""
     fi
 
     # Exclude internal IDE directories, git histories, and caches to save bandwidth
