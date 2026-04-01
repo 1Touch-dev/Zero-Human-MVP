@@ -1,32 +1,45 @@
 #!/usr/bin/env bash
 
-# sync_to_runpod.sh
+# sync_to_remote.sh
 # -----------------------------------------------------------------------------
 # Zero-Human MVP Synchronization Utility
 # -----------------------------------------------------------------------------
 # This script continuously or manually pushes all local architecture modifications
-# (Python Bridges, SQL Schemas, Webhooks, Docs) securely to your remote RunPod.
+# (Python Bridges, SQL Schemas, Webhooks, Docs) securely to your remote server 
+# (AWS EC2, RunPod, etc).
 # 
 # Usage:
-#   ./sync_to_runpod.sh          # One-time manual sync
-#   ./sync_to_runpod.sh --watch  # Continuous syncing on file change (requires fswatch)
+#   ./scripts/sync_to_remote.sh          # One-time manual sync
+#   ./scripts/sync_to_remote.sh --watch  # Continuous syncing
 # -----------------------------------------------------------------------------
 
-# Configuration (Replace with your exact RunPod details, optionally via .env)
-RUNPOD_USER="root"
-RUNPOD_IP="194.68.245.210"
-RUNPOD_PORT="22168"
-REMOTE_DIR="/home/paperclip/Zero-Human-MVP"
+# Configuration (Load from .env if it exists, use defaults otherwise)
+if [ -f .env ]; then
+    export $(grep -v '^#' .env | xargs)
+fi
+
+# DEFAULT SETTINGS (Override these in your local .env)
+RUNPOD_USER="${RUNPOD_USER:-ubuntu}"
+RUNPOD_IP="${RUNPOD_IP:-0.0.0.0}" # Placeholder: Set your EC2 IP in .env
+RUNPOD_PORT="${RUNPOD_PORT:-22}"
+REMOTE_DIR="${REMOTE_DIR:-/home/ubuntu/Zero-Human-MVP}"
+SSH_KEY_PATH="${SSH_KEY_PATH:-~/.ssh/Agentic-AI-Key.pem}"
 LOCAL_DIR="$(pwd)"
 
-echo "🚀 Zero-Human MVP: Initializing Sync to RunPod ($RUNPOD_IP:$RUNPOD_PORT)..."
+echo "🚀 Zero-Human MVP: Initializing Sync to Remote Server ($RUNPOD_IP:$RUNPOD_PORT)..."
 
 sync_files() {
     echo "[$(date +'%T')] Synchronizing Workspace to RunPod..."
     
+    # Construct SSH command with optional identity file
+    SSH_CMD="ssh -p $RUNPOD_PORT -o StrictHostKeyChecking=no"
+    if [ -f "$SSH_KEY_PATH" ]; then
+        SSH_CMD="$SSH_CMD -i $SSH_KEY_PATH"
+    fi
+
     # Exclude internal IDE directories, git histories, and caches to save bandwidth
     rsync -avz --delete \
-        -e "ssh -p $RUNPOD_PORT -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no" \
+        -e "$SSH_CMD" \
         --exclude '.git/' \
         --exclude '.gemini/' \
         --exclude '__pycache__/' \
@@ -36,7 +49,7 @@ sync_files() {
     if [ $? -eq 0 ]; then
         echo "✅ Sync Successful."
     else
-        echo "❌ Sync Failed. Check SSH connection."
+        echo "❌ Sync Failed. Check SSH connection and .env settings."
     fi
 }
 

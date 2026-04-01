@@ -1,8 +1,23 @@
 # Zero-Human Company: Deployment & Replication Guide 🛠️
 
-This manual contains the **exact terminal commands and sequential steps** required to deploy the complete, modernized Zero-Human Agentic Pipeline from scratch on a brand new, empty Ubuntu Server (e.g., RunPod, AWS EC2, or DigitalOcean). 
+This manual contains the **exact terminal commands and sequential steps** required to deploy the complete, modernized Zero-Human Agentic Pipeline from scratch on a brand new, empty Ubuntu Server.
 
-By following these instructions, any external development team can perfectly mirror the secure infrastructure we architected, utilizing dynamic `.env` configurations and completely avoiding deprecated `.netrc` security liabilities.
+> [!IMPORTANT]
+> **Primary Environment Recommendation**: While this guide covers both RunPod and EC2, we **strongly recommend AWS EC2 (t3.large)** for production scalability and exponential expansion.
+> 
+> **MIGRATING FROM RUNPOD?**
+> If you are shifting an existing instance from RunPod to AWS, please follow the specialized:
+> 👉 [**RunPod to EC2 Migration Guide**](ZERO_HUMAN_MIGRATION_GUIDE.md)
+
+---
+
+## Phase 0: Infrastructure Selection (AWS vs. RunPod)
+
+| Feature | AWS EC2 (Recommended) | RunPod (Prototype) |
+| :--- | :--- | :--- |
+| **Instance** | **t3.large** (8GB RAM) | Community Cloud GPU |
+| **Storage** | **30GB gp3 SSD** | Network Volume |
+| **Ports** | Standard (22, 3000, 8000) | Randomized Proxy |
 
 ---
 
@@ -135,7 +150,7 @@ To guarantee absolute security, avoid ever logging passwords natively into termi
 **Everything is driven entirely by a single `.env` file!**
 
 ### 5.1 Push Tokens from Your Local Machine
-From your **Local Mac/PC terminal** (NOT the EC2/RunPod Server), explicitly run the synchronization script built into the repository to securely ferry your active tokens natively over Rsync into the remote cluster:
+From your **Local Development Machine** (Mac, Linux, or Windows WSL—NOT the EC2/RunPod Server), explicitly run the synchronization script built into the repository to securely ferry your active tokens natively over Rsync into the remote cluster:
 ```bash
 # On your Local Machine inside the Zero-Human-MVP directory:
 # Ensure your .env file is populated with GITHUB_TOKEN and OPENAI_API_KEY
